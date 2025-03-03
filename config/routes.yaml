@@ -1,0 +1,23 @@
+kernel:
+    resource: ../src/Shared/Infrastructure/Kernel.php
+    type: attribute
+
+api_refresh_token:
+    path: /api/v1/user/refresh-token
+    methods: POST
+
+api_login_check:
+    path: /api/v1/user/signIn
+    methods: POST
+
+user:
+    resource: ../src/User/Presentation/Controller/
+    type: attribute
+
+quest:
+    resource: ../src/Quest/Presentation/Controller/
+    type: attribute
+
+review:
+    resource: ../src/Review/Presentation/Controller/
+    type: attribute

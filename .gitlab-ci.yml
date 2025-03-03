@@ -1,0 +1,49 @@
+image: composer:2.7.6
+
+stages:
+  - build
+  - codestyle
+
+cache:
+  key: "dependenciesCache"
+  paths:
+    - migrations/
+    - vendor/
+    - var/
+    - .env
+    - composer.lock
+    - symfony.lock
+
+# ================================================== #
+#                     STAGE BUILD                    #
+# ================================================== #
+
+build_dependencies:
+  stage: build
+  script:
+    - cp .env.dist .env
+    - if ! [ -s ./phan ]; then composer dependencies:dev_ci; fi;
+
+# ================================================== #
+#                  STAGE CODE STYLE                  #
+# ================================================== #
+
+php-cs-fixer:
+  stage: codestyle
+  artifacts:
+    paths:
+      - report.*
+    expire_in: 1 week
+    when: on_failure
+  cache:
+    key: "dependenciesCache"
+    policy: pull
+    paths:
+      - migrations/
+      - vendor/
+      - var/
+      - .env
+      - composer.lock
+      - symfony.lock
+  script:
+    - composer analyze:codestyle_ci
